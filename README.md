@@ -26,48 +26,49 @@ Make sure you have the following:
 
 ## Example Workflow File
 
-Here's an example of a GitHub Workflow file (`deploy.yml`) that deploys website files to S3 Bucket:
+ * Example of a GitHub Workflow file (`deploy.yml`) that deploys website files to S3 Bucket:
 
-```yaml
-name: Deployment
+   ```yaml
+   name: Deployment
+   
+   on:
+     push:
+       branches:
+       - main
 
-on:
-  push:
-    branches:
-    - main
+   jobs:
+     build-and-deploy:
+       runs-on: ubuntu-latest
+       steps:
+       - name: Checkout
+         uses: actions/checkout@v1
+       - name: Configure AWS Credentials
+         uses: aws-actions/configure-aws-credentials@v1
+         with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: <aws-region>
+       - name: Deploy static site to S3 bucket
+         run: aws s3 sync . s3://<bucket-name>
+    ```
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+## Workflow Steps
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: <aws-region>
+ * The Workflow steps can be seen in [Actions](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/actions/runs/8371112817/job/22919586621) page.
 
-    - name: Deploy static site to S3 bucket
-      run: aws s3 sync . s3://<bucket-name>
-```
+   ![Screenshot (513)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/b445ea76-6555-44d0-a98d-5eb31fb0d6e7)
 
-## Workflow Steps:
+## Deployed Objects
 
-![Screenshot (513)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/b445ea76-6555-44d0-a98d-5eb31fb0d6e7)
+ * The Github repo is deployed to S3 bucket shown below by Github Workflows:
 
-
-## Deployment:
-
-![Screenshot (514)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/a6887aeb-ca88-4784-ba8a-052dcaa0f785)
+   ![Screenshot (514)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/a6887aeb-ca88-4784-ba8a-052dcaa0f785)
 
 
 ## Output
 
 - Make all Objects stored in S3 Bucket public using ACL.
-- Access Index.html object Url through a Browser.
+- Access Index.html Object URL through a Browser.
 
   ![Screenshot (518)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/2373120e-f6af-4105-b04c-e17824655d1a)
   ![neon-clock s3 us-west-2 amazonaws com_index html - Personal - Microsoft_ Edge 2024-03-20 23-45-11 (2)](https://github.com/nisamuhmed/Github-Workflow-AWS-S3/assets/156061244/c993c314-00af-40a1-8e03-9d8f4253e037)
